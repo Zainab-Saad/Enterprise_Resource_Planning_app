@@ -1,0 +1,35 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Orders</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_purchase_orders' %}">Add Purchase Order</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+        <th>PONumber</th>
+        <th>Open Full PO</th>
+        </tr>
+        {% for each_purchase_order in purchase_orders %}
+            <tr>
+                
+                <td>{{each_purchase_order.ponumber}}</td>
+                <td><a href="{% url 'purchase_order_info' each_purchase_order.ponumber %}">Open</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endblock %}
+</body>
+</html>
+
+
+<!-- {% url 'purchase_orders' %}?q={{each_purchase_order.ponumber}} -->

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="">LOGO</a>
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'purchase_orders' %}">Purchase Orders</a>
+    <a href="{% url 'sellers' %}">Sellers</a>
+    <a href="{% url 'products' %}">Products</a>
+    <a href="{% url 'prices' %}">Price</a>
+    <!-- <a href="{% url 'customers' %}">Customers</a> -->
+    <!-- <a href="">Stock</a> -->
+    <!-- <a href="">LDN</a> -->
+    <!-- <a href="{% url 'sale_invoices' %}">Sale Invoice</a> -->
+    <a href="">Username</a>
+    <a href="">Logout</a>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

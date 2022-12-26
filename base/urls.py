@@ -1,0 +1,30 @@
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.home, name="dashboard"),
+    path('purchase-orders/', views.purchase_orders, name="purchase_orders"),
+    path('add-purchase-order/', views.purchase_orders_add, name="add_purchase_orders"),
+    path('purchase-orders/<str:instance_ponumber>', views.purchase_order_info, name="purchase_order_info"),
+    path('update-purchase-order/<str:pk>', views.update_purchase_order, name="update_purchase_order"),
+    path('delete-purchase-order/<str:pk>', views.delete_purchase_order, name="delete_purchase_order"), 
+    path('update-transactions/<str:pk>', views.update_transactions, name="update_transactions"),
+    path('verify-purchase-order/<str:pk>', views.verify_purchase_order, name="verify_purchase_order"),
+    path('sellers/', views.sellers, name="sellers"),
+    path('add-sellers/', views.sellers_add, name="add_sellers"),
+    path('sellers/<str:instance_sellercode>', views.sellers_info, name="sellers_info"),
+    path('products/', views.products, name="products"),
+    path('add-products/', views.products_add, name="add_products"),
+    path('update-products/<str:pk>', views.products_update, name="update_products"),
+    path('customers/', views.customers, name="customers"),
+    path('customers/<str:instance_customercode>', views.customers_info, name="customers_info"),
+    path('add-customers/', views.customers_add, name="add_customers"),
+    path('dashboard/', views.home, name="dashboard"),
+    path('add-transaction/<str:pk>', views.purchase_transactions_add, name="purchase_add_transactions"),
+    path('sale-invoices/', views.sale_invoices, name="sale_invoices"),
+    path('add-sale-invoice/', views.sale_invoice_add, name="add_sale_invoice"),
+    path('add-transaction/<str:pk>', views.sale_transactions_add, name="sale_add_transactions"),
+    path('prices/', views.prices, name="prices"),
+    path('add-price/', views.prices_add, name="add_prices"),
+    path('update-price/<str:pk>', views.prices_update, name="update_prices"),
+]

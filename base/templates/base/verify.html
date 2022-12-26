@@ -1,0 +1,24 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify</title>
+</head>
+<body>
+    {% block content %}
+        {% if status %}
+            <h5>Are you sure you want to verify?</h5>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="submit" name="yes" value="Yes">
+                <input type="submit" name="no" value="Go Back">
+            </form>
+        {% else %}
+            <h5>Document not legible for verification</h5>
+        {% endif %}
+    {% endblock %}
+</body>
+</html>

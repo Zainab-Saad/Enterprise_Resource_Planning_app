@@ -1,0 +1,131 @@
+{% extends 'base/purchase_orders.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=
+    , initial-scale=1.0">
+    <title>Purchase Order {{purchase_order.ponumber}}</title>
+</head>
+<body>
+    {% block content %}
+    <!-- {% for each_dict in po_info_list %}
+        {% for key,value in each_dict.items %}{{ value }}{% endfor %}
+    {% endfor %} -->
+    <h5>Info Page</h5>
+    {% if purchase_order.purchaseinvoicenum == None and purchase_order.finalpaymenttrxid == None %}
+        <a href="{% url 'update_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Update PO"></a>
+        {% if purchase_order.isverified == 0 %}
+            <a href="{% url 'update_transactions' purchase_order.ponumber %}"><input type="submit" value="Update Transactions"></a>
+            <a href="{% url 'verify_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Verify PO"></a>
+            <a href="{% url 'delete_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Delete PO"></a>
+        {% endif %}
+    {% else %}
+        <a href="">Add Purchase Order Delivery Details</a>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <table>
+    <tr>
+        <th>Purchase Order Number</th>
+        <td>{{purchase_order.ponumber}}</td>
+    </tr>
+    <tr>
+        <th>Seller Code</th>
+        <td>{{purchase_order.sellercode.sellercode}}</td>
+    </tr>
+    <tr>
+        <th>Seller Name</th>
+        <td>{{purchase_order.sellercode.sellername}}</td>
+    </tr>
+    <tr>
+        <th>Seller GST</th>
+        <td>{{purchase_order.sellercode.gst}}</td>
+    </tr>
+    <tr>
+        <th>Seller NTN</th>
+        <td>{{purchase_order.sellercode.ntn}}</td>
+    </tr>
+    <tr>
+        <th>Delivery Date</th>
+        <td>{{purchase_order.podeliverydate}}</td>
+    </tr>
+    <tr>
+        <th>Total Payable Amount</th>
+        <td>{{purchase_order.totalpayableamount}}</td>
+    </tr>
+    <tr>
+        <th>Advance Payment</th>
+        <td>{{purchase_order.advancepayment}}</td>
+    </tr>
+    <tr>
+        <th>Advance Payment TRX ID</th>
+        <td>{{purchase_order.advancepaymenttrxid}}</td>
+    </tr>
+    <tr>
+        <th>Date Created</th>
+        <td>{{purchase_order.datecreated}}</td>
+    </tr>
+    <tr>
+        <th>Created By</th>
+        <td>{{purchase_order.createdby}}</td>
+    </tr>
+    <tr>
+        <th>Purchase Invoice Number</th>
+        {% if purchase_order.purchaseinvoicenum == None %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <td>{{form.purchaseinvoicenum}}</td>
+                <input type="submit" name="submit" value="Save PO Invoice Number">
+            </form>
+        {% else %}
+            <td>{{purchase_order.purchaseinvoicenum}}</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <th>Final Payment TRX ID</th>
+        {% if purchase_order.finalpaymenttrxid == None %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                <td>{{form.finalpaymenttrxid}}</td>
+                <input type="submit" name="submit" value="Save Final Payment TRX ID">
+            </form>
+        {% else %}
+            <td>{{purchase_order.finalpaymenttrxid}}</td>
+        {% endif %}
+    </tr>
+</table> -->

@@ -1,0 +1,43 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sellers</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_sellers' %}">Add Seller</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Seller Code</th>
+            <th>Seller Name</th>
+            <th>Seller GST</th>
+            <th>Seller NTN</th>
+            <th>Is Active</th>
+        </tr>
+        <tbody>
+            {% for each_seller in sellers %}
+                <tr>
+                    <td>{{each_seller.sellercode}}</td>
+                    <td>{{each_seller.sellername}}</td>
+                    <td>{{each_seller.gst}}</td>
+                    <td>{{each_seller.ntn}}</td>
+                    {% if each_seller.isactive == True %}
+                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">🟢</a></td>
+                    {% else %}
+                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">🔴</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}
+</body>
+</html>
