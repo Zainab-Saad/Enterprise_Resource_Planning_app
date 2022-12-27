@@ -1,0 +1,32 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product</title>
+</head>
+<body>
+    {% block content %}
+    <table>
+        <tr>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th>Price Code</th>
+            <th>Date Added</th>
+            <th>Selling Rate</th>
+            <th>Loading Rate</th>
+        </tr>
+        {% for each_record in product %}
+            <tr>
+                {% for each_field in each_record %}
+                    <td>{{each_field}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %} 
+    </table>
+    {% endblock %}
+    
+</body>
+</html>

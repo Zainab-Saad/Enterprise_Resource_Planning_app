@@ -17,14 +17,18 @@
     <table>
         <tr>
             <th>Price Code</th>
-            <th>Price Name</th>
-            <th>Update</th>
+            <th>Price Title</th>
+            <th>Date Updated</th>
+            <th>Sale Tax Rate</th>
+            <th>Max Dicsount Rate</th>
+            <th>Update Price Code Information</th>
         </tr>
         {% for each_price in prices %}
             <tr>
-                <td>{{each_price.pricecode}}</td>
-                <td>{{each_price.pricetitle}}</td>
-                <td><a href="{% url 'update_prices' each_price.pricecode %}">Update</a></td>
+                {% for each_price_info in each_price %}
+                    <td>{{each_price_info}}</td>
+                {% endfor %}
+                <td><a href="{% url 'update_prices' each_price.0 %}">Update</a></td>
             </tr>
         {% endfor %}
     </table>

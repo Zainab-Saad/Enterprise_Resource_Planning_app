@@ -1,4 +1,4 @@
-{% extends 'base/purchase_orders.html' %}
+{% extends 'navbar.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +10,41 @@
 </head>
 <body>
     {% block content %}
-    <!-- {% for each_dict in po_info_list %}
-        {% for key,value in each_dict.items %}{{ value }}{% endfor %}
-    {% endfor %} -->
-    <h5>Info Page</h5>
+    <!-- purchase order table -->
+    <table>
+        <th>Purchase Order Number</th>
+        <th>Total Payable Amount</th>
+        <th>Purchase Order Delivery Date</th>
+        <th>Advance Payment %</th>
+        <th>Advance Payment TRX ID</th>
+        <th>Created By</th>
+        <th>Purchase Invoice Number</th>
+        <th>Final Payment TRX ID </th>
+        <tr>
+            {% for each_field in purchase_order_detail %}
+                <td>{{each_field}}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <!-- transaction table  -->
+    <table>
+        <th>Product Code</th>
+        <th>Product Name</th>
+        <th>Quantity</th>
+        <th>Rate</th>
+        <th>Supply Point</th>
+        <th>Freight Charges</th>
+        <th>Payable Amount</th>
+        
+        {% for each_record in po_trans_detail %}
+            <tr>
+                {% for each_field in each_record %}
+                    <td>{{each_field}}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        
+    </table>
     {% if purchase_order.purchaseinvoicenum == None and purchase_order.finalpaymenttrxid == None %}
         <a href="{% url 'update_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Update PO"></a>
         {% if purchase_order.isverified == 0 %}
@@ -21,8 +52,7 @@
             <a href="{% url 'verify_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Verify PO"></a>
             <a href="{% url 'delete_purchase_order' purchase_order.ponumber %}"><input type="submit" value="Delete PO"></a>
         {% endif %}
-    {% else %}
-        <a href="">Add Purchase Order Delivery Details</a>
+    
     {% endif %}
     {% endblock %}
 </body>

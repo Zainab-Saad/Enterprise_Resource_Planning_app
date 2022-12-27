@@ -22,7 +22,7 @@ def UPOST(post, obj):
     return post
 
 def purchase_orders(request):
-    purchase_orders = Purchaseorder.objects.all()
+    purchase_orders = purchase_order_generic_view()
     context = {
         'purchase_orders' : purchase_orders
     }
@@ -91,9 +91,11 @@ def purchase_orders_add(request):
 
 def purchase_order_info(request, instance_ponumber):
     purchase_order = Purchaseorder.objects.get(ponumber=instance_ponumber)
-    po_info_list = sp_show_po_transactions(instance_ponumber)
+    purchase_order_detail = sp_show_purchase_order_info(instance_ponumber)
+    po_trans_detail = show_po_transactions_info(instance_ponumber)
     context = {
-        'po_info_list' : po_info_list,
+        'po_trans_detail' : po_trans_detail,
+        'purchase_order_detail' : purchase_order_detail,
         'purchase_order' : purchase_order
     }
     return render(request, 'base/purchase_order_info.html', context)
@@ -227,6 +229,13 @@ def products(request):
     }
     return render(request, 'base/products.html', context)
 
+
+def products_info(request, instance_productcode):
+    product = sp_show_product_info(instance_productcode)
+    context = {
+        'product' : product
+    }
+    return render(request, 'base/product_info.html', context)
 def products_add(request):
     ProductPriceFormSet = inlineformset_factory(Product, Productprice,
                             fields = ('pricecode', 'sellingrate', 'loadingrate'),
@@ -389,7 +398,7 @@ def sale_invoice_add(request):
 
 # TODO - write an SP for price, pricerate
 def prices(request):
-    prices = Price.objects.all()
+    prices = price_generic_view()
     context = {
         'prices' : prices
     }
@@ -431,13 +440,12 @@ def prices_update(request, pk):
     form = PriceRateForm(instance=(price_rate[len(price_rate)-1]))
     if request.method == 'POST':
         print(request.POST)
-        # post_dict = request.POST.copy()
-        # post_dict['pricecode'] = price_rate[len(price_rate)-1]
-        # print(post_dict)
         form = PriceRateForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('prices')
+        else:
+            messages.error(request, 'Required Fields not filled, or filled incorrectly')
     context = {
         'form' : form
     }
@@ -480,5 +488,37 @@ def sp_is_verification_legible(ponumber):
     with connection.cursor() as cursor:
         cursor.callproc('is_verification_legible', [ponumber])
         result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def purchase_order_generic_view():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM purchase_order_generic_view")
+        result = cursor.fetchall()
+    return result
+
+def price_generic_view():
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM price_generic_view")
+        result = cursor.fetchall()
+    return result
+
+def sp_show_product_info(productcode):
+    with connection.cursor() as cursor:
+        cursor.callproc('show_product_info', [productcode])
+        result = cursor.fetchall()
+    return result
+
+def sp_show_purchase_order_info(ponumber):
+    with connection.cursor() as cursor:
+        cursor.callproc('show_purchase_order_info', [ponumber])
+        result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def show_po_transactions_info(ponumber):
+    with connection.cursor() as cursor:
+        cursor.callproc('po_transactions_detail', [ponumber])
+        result = cursor.fetchall()
         cursor.close()
     return result

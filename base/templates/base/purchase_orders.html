@@ -15,17 +15,21 @@
     <br>
     <br>
     <table>
-        <tr>
-        <th>PONumber</th>
-        <th>Open Full PO</th>
-        </tr>
-        {% for each_purchase_order in purchase_orders %}
+        <th>Verification Status</th>
+        <th>Purchase Order Number</th>
+        <th>Seller</th>
+        <th>Number of Transactions</th>
+        <th>Date Created</th>
+        <th>Open Full Purchase Order</th>
+        {% for each_po in purchase_orders %}
             <tr>
-                
-                <td>{{each_purchase_order.ponumber}}</td>
-                <td><a href="{% url 'purchase_order_info' each_purchase_order.ponumber %}">Open</a></td>
+                {% for each_field in each_po %}
+                    <td>{{each_field}}</td>
+                {% endfor %}
+                <td><a href="{% url 'purchase_order_info' each_po.1 %}">Open</a></td>
             </tr>
         {% endfor %}
+        
     </table>
     {% endblock %}
 </body>

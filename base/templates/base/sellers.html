@@ -20,7 +20,8 @@
             <th>Seller Name</th>
             <th>Seller GST</th>
             <th>Seller NTN</th>
-            <th>Is Active</th>
+            <th>Activity Status</th>
+            <th>Edit</th>
         </tr>
         <tbody>
             {% for each_seller in sellers %}
@@ -30,10 +31,11 @@
                     <td>{{each_seller.gst}}</td>
                     <td>{{each_seller.ntn}}</td>
                     {% if each_seller.isactive == True %}
-                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">🟢</a></td>
+                        <td>Active</td>
                     {% else %}
-                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">🔴</a></td>
+                        <td>InActive</td>
                     {% endif %}
+                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">Edit</a></td>
                 </tr>
             {% endfor %}
         </tbody>
