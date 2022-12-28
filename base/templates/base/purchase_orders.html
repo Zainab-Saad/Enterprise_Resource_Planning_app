@@ -1,14 +1,10 @@
-{% extends 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'main.html' %}
+
+{% block head %}
     <title>Purchase Orders</title>
-</head>
-<body>
-    {% block content %}
+{% endblock %}
+
+{% block content %}
     <br>
     <br>
     <a href="{% url 'add_purchase_orders' %}">Add Purchase Order</a>
@@ -31,9 +27,6 @@
         {% endfor %}
         
     </table>
-    {% endblock %}
-</body>
-</html>
-
+{% endblock %}
 
 <!-- {% url 'purchase_orders' %}?q={{each_purchase_order.ponumber}} -->

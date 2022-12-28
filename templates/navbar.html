@@ -1,32 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <a href="">LOGO</a>
-    <a href="{% url 'dashboard' %}">Dashboard</a>
-    <a href="{% url 'purchase_orders' %}">Purchase Orders</a>
-    <a href="{% url 'sellers' %}">Sellers</a>
-    <a href="{% url 'products' %}">Products</a>
-    <a href="{% url 'prices' %}">Price</a>
-    <!-- <a href="{% url 'customers' %}">Customers</a> -->
-    <!-- <a href="">Stock</a> -->
-    <!-- <a href="">LDN</a> -->
-    <!-- <a href="{% url 'sale_invoices' %}">Sale Invoice</a> -->
-    <a href="">Username</a>
-    <a href="{% url 'logout' %}">Logout</a>
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li>{{message}}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    {% block content %}
-    {% endblock %}
-</body>
-</html>
+<div class="w3-top">
+    <div class="w3-bar w3-teal w3-card w3-left-align w3-large">
+        <a href="{% url 'dashboard' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">O&G</a>
+        <a href="{% url 'dashboard' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey" >Dashboard</a>
+        <a href="{% url 'purchase_orders' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Purchase Orders</a>
+        <a href="{% url 'sellers' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Sellers</a>
+        <a href="{% url 'products' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Products</a>
+        <a href="{% url 'prices' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Price</a>
+        <!-- <a href="{% url 'customers' %}">Customers</a> -->
+        <!-- <a href="">Stock</a> -->
+        <!-- <a href="">LDN</a> -->
+        <!-- <a href="{% url 'sale_invoices' %}">Sale Invoice</a> -->
+        <label class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Hey,{{user.username}}!</label>
+        <a href="{% url 'logout' %}" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-light-grey">Logout</a>
+    </div>
+</div>
