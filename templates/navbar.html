@@ -18,7 +18,7 @@
     <!-- <a href="">LDN</a> -->
     <!-- <a href="{% url 'sale_invoices' %}">Sale Invoice</a> -->
     <a href="">Username</a>
-    <a href="">Logout</a>
+    <a href="{% url 'logout' %}">Logout</a>
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}

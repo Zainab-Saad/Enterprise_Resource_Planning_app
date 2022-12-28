@@ -3,15 +3,49 @@ from . import templates
 from .forms import PurchaseOrderForm, CustomerForm, CityForm, SellerForm, ProductForm, SaleInvoiceForm, PriceForm, PriceRateForm, ProductUpdateForm, ProductPriceForm, PurchaseOrderUpdateForm_Unverified, PoTransactionFormSet, PoTransactionUpdateFormSet, PurchaseOrderUpdateForm_Verified
 from .models import Purchaseorder, Seller, Product, Customer, Purchaseordertransaction, Saleinvoice, Saleinvoicetransaction, Price, Pricerate, Productprice
 from django.forms.models import model_to_dict
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import authenticate, login, logout
 from django.forms import modelformset_factory, inlineformset_factory
 from copy import copy
 from django.contrib import messages
+
 # Create your views here.
+@login_required(login_url='login')
 def home(request):
     context = {
         
     }
     return render(request, 'base/dashboard.html', context)
+
+def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    if request.method == 'POST':
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request, 'Username does not exist')
+            return render(request, 'base/login.html', {})
+        # verify password of user after username is validated
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, 'Invalid Password')
+    context = {
+        
+    }
+    return render(request, 'base/login.html', context)
+
+@login_required(login_url='login')
+def logout_user(request):
+    logout(request)
+    return redirect('login')
+
 
 # method to update the POST request dictionary
 def UPOST(post, obj):
@@ -21,6 +55,8 @@ def UPOST(post, obj):
     
     return post
 
+@login_required(login_url='login')
+@permission_required('base.view_purchaseorder', raise_exception=True)
 def purchase_orders(request):
     purchase_orders = purchase_order_generic_view()
     context = {
@@ -28,6 +64,8 @@ def purchase_orders(request):
     }
     return render(request, 'base/purchase_orders.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_purchaseordertransaction', raise_exception=True)
 def purchase_transactions_add(request, pk):
     purchase_order = Purchaseorder.objects.get(ponumber=pk)
     if request.method == 'POST':
@@ -42,9 +80,6 @@ def purchase_transactions_add(request, pk):
             
             for tran in transaction_form:
                 tran.save()
-
-                # transaction.potransactionnum = sp_po_transaction_number(pk)
-                # transaction.save()
             sp_po_total_payable_amount(pk)
             if 'po_complete' in request.POST:
                 return redirect('purchase_orders')
@@ -60,6 +95,8 @@ def purchase_transactions_add(request, pk):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_purchaseorder', raise_exception=True)
 def purchase_orders_add(request):
     if request.method == 'POST':
         form = PurchaseOrderForm(request.POST)
@@ -76,6 +113,7 @@ def purchase_orders_add(request):
         if 'add_transaction' in request.POST:
             if form.is_valid():
                 purchase_order = form.save(commit=False)
+                purchase_order.createdby = request.user
                 purchase_order.save()
                 return redirect('purchase_add_transactions', purchase_order)
             else:
@@ -88,11 +126,13 @@ def purchase_orders_add(request):
     }
     return render(request, 'base/form.html', context)
 
-
+@login_required(login_url='login')
+@permission_required('base.view_purchaseorder', raise_exception=True)
+@permission_required('base.view_purchaseordertransaction', raise_exception=True)
 def purchase_order_info(request, instance_ponumber):
     purchase_order = Purchaseorder.objects.get(ponumber=instance_ponumber)
     purchase_order_detail = sp_show_purchase_order_info(instance_ponumber)
-    po_trans_detail = show_po_transactions_info(instance_ponumber)
+    po_trans_detail = sp_show_po_transactions_info(instance_ponumber)
     context = {
         'po_trans_detail' : po_trans_detail,
         'purchase_order_detail' : purchase_order_detail,
@@ -100,6 +140,8 @@ def purchase_order_info(request, instance_ponumber):
     }
     return render(request, 'base/purchase_order_info.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_purchaseorder', raise_exception=True)
 def update_purchase_order(request, pk):
     purchase_order = Purchaseorder.objects.get(ponumber=pk)
     if request.method == 'POST':
@@ -123,6 +165,9 @@ def update_purchase_order(request, pk):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_purchaseordertransaction', raise_exception=True)
+@permission_required('base.delete_purchaseordertransaction', raise_exception=True)
 def update_transactions(request, pk):
     purchase_order = Purchaseorder.objects.get(ponumber=pk)
     trans_update_form = None
@@ -149,6 +194,8 @@ def update_transactions(request, pk):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.verify_purchaseorder', raise_exception=True)
 def verify_purchase_order(request, pk):
     if request.method == 'POST':
         print(request.POST)
@@ -166,7 +213,8 @@ def verify_purchase_order(request, pk):
     }
     return render(request, 'base/verify.html', context)
 
-
+@login_required(login_url='login')
+@permission_required('base.delete_purchaseorder', raise_exception=True)
 def delete_purchase_order(request, pk):
     if request.method == 'POST':
         print(request.POST)
@@ -181,8 +229,12 @@ def delete_purchase_order(request, pk):
     }
     return render(request, 'base/delete.html', context)
 
+@login_required(login_url='login')
 def po_transaction_delivery(request):
     return 
+
+@login_required(login_url='login')
+@permission_required('base.view_seller', raise_exception=True)
 def sellers(request):
     sellers = Seller.objects.all()
     context = {
@@ -190,6 +242,8 @@ def sellers(request):
     }
     return render(request, 'base/sellers.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_seller', raise_exception=True)
 def sellers_add(request):
     if request.method == 'POST':
         form = SellerForm(request.POST)
@@ -205,6 +259,8 @@ def sellers_add(request):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_seller', raise_exception=True)
 def sellers_info(request, instance_sellercode):
     seller = Seller.objects.get(sellercode = instance_sellercode)
     form = SellerForm(instance=seller)
@@ -222,6 +278,8 @@ def sellers_info(request, instance_sellercode):
     }
     return render(request, 'base/is_active.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.view_product', raise_exception=True)
 def products(request):
     products = Product.objects.all()
     context = {
@@ -229,13 +287,17 @@ def products(request):
     }
     return render(request, 'base/products.html', context)
 
-
+@login_required(login_url='login')
+@permission_required('base.view_product', raise_exception=True)
 def products_info(request, instance_productcode):
     product = sp_show_product_info(instance_productcode)
     context = {
         'product' : product
     }
     return render(request, 'base/product_info.html', context)
+
+@login_required(login_url='login')
+@permission_required('base.add_product', raise_exception=True)
 def products_add(request):
     ProductPriceFormSet = inlineformset_factory(Product, Productprice,
                             fields = ('pricecode', 'sellingrate', 'loadingrate'),
@@ -267,6 +329,8 @@ def products_add(request):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_product', raise_exception=True)
 def products_update(request, pk):
     product = Product.objects.get(productcode=pk)
     product_update_form = ProductUpdateForm(instance = product)
@@ -304,7 +368,8 @@ def products_update(request, pk):
     }
     return render(request, 'base/form.html', context)
 
-# add custoemrs only though invoice, otherwise just give view funcionality
+@login_required(login_url='login')
+@permission_required('base.view_customer', raise_exception=True)
 def customers(request):
     customers = Customer.objects.all()
     context = {
@@ -312,6 +377,8 @@ def customers(request):
     }
     return render(request, 'base/customers.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_customer', raise_exception=True)
 def customers_add(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -326,6 +393,8 @@ def customers_add(request):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_customer', raise_exception=True)
 def customers_info(request, instance_customercode):
     customer = Customer.objects.get(customercode = instance_customercode)
     form = CustomerForm(instance=customer)
@@ -343,6 +412,8 @@ def customers_info(request, instance_customercode):
     }
     return render(request, 'base/is_active.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.view_saleinvoice', raise_exception=True)
 def sale_invoices(request):
     sale_invoices = Saleinvoice.objects.all()
     context = {
@@ -350,6 +421,8 @@ def sale_invoices(request):
     }
     return render(request, 'base/sale_invoice.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_saleinvoicetransaction', raise_exception=True)
 def sale_transactions_add(request, pk):
     TransFormSet = inlineformset_factory(Saleinvoice, Saleinvoicetransaction, 
                     fields = ('saletransactionnumber', 'productcode', 'pricecode', 'discountrate', 'quantity',
@@ -364,11 +437,6 @@ def sale_transactions_add(request, pk):
         if form_set.is_valid():
             form_set.save()
             sale_invoice_trans = Saleinvoicetransaction.objects.filter(invoicenumber = sale_invoice.invoicenumber)
-            # total_amount = 0
-            # for each_tran in sale_invoice_trans:
-            #     total_amount += each_tran.payableamount
-            
-            # purchase_order.totalpayableamount = total_amount
             sale_invoice.save()
             return redirect('sale_invoices')
         else:
@@ -379,6 +447,8 @@ def sale_transactions_add(request, pk):
     
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_saleinvoice', raise_exception=True)
 def sale_invoice_add(request):
     if request.method == 'POST':
         form = SaleInvoiceForm(request.POST)
@@ -396,7 +466,8 @@ def sale_invoice_add(request):
     return render(request, 'base/form.html', context)
 
 
-# TODO - write an SP for price, pricerate
+@login_required(login_url='login')
+@permission_required('base.view_price', raise_exception=True)
 def prices(request):
     prices = price_generic_view()
     context = {
@@ -404,6 +475,8 @@ def prices(request):
     }
     return render(request, 'base/prices.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.add_price', raise_exception=True)
 def prices_add(request):
     PriceRateFormSet = inlineformset_factory(Price, Pricerate, 
                             fields=('saletaxrate', 'maxdiscountrate') , 
@@ -435,6 +508,8 @@ def prices_add(request):
     }
     return render(request, 'base/form.html', context)
 
+@login_required(login_url='login')
+@permission_required('base.change_price', raise_exception=True)
 def prices_update(request, pk):
     price_rate = Pricerate.objects.filter(pricecode=pk)
     form = PriceRateForm(instance=(price_rate[len(price_rate)-1]))
@@ -455,7 +530,6 @@ def prices_update(request, pk):
 
 
 # methods to call mysql stored procedures
-
 from django.db import connection
 
 def dictfetchall(cursor):
@@ -516,7 +590,7 @@ def sp_show_purchase_order_info(ponumber):
         cursor.close()
     return result
 
-def show_po_transactions_info(ponumber):
+def sp_show_po_transactions_info(ponumber):
     with connection.cursor() as cursor:
         cursor.callproc('po_transactions_detail', [ponumber])
         result = cursor.fetchall()

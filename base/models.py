@@ -196,6 +196,7 @@ class Purchaseorder(models.Model):
                 name = 'purchase_order_chek_3'
             )
         ]
+        permissions = [('verify_purchaseorder', 'verify purchase order')]
 
     def __str__(self):
         return self.ponumber

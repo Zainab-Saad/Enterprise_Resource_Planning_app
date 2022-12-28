@@ -1,6 +1,0 @@
-TODO
-- delete po
-- update transactions -- add, update, delete ))))))
-- update po if verified )))))))
-- verify po )))))))
-- write views for all the generic view pages
