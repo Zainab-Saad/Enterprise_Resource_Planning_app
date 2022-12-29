@@ -1,0 +1,32 @@
+{% extends 'navbar.html' %}
+{% block content %}
+<script src="https://cdn.zingchart.com/zingchart.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<div id="myChart"></div>
+<script>
+    var chartData = {
+        "type" : "ring",
+        "title" : "Verified/Unverified",
+        "scale-x" : {
+            "values" : [
+                "Dennis",
+                "Erik",
+                "Tim"]
+        },
+        series: [{
+            values: [10]
+          },
+          {
+            values: [1]
+          },
+        ]
+    }
+
+    zingchart.render({
+        id : "myChart",
+        data : chartData,
+        width : 320,
+        height : 320
+    })
+</script>
+{% endblock %}

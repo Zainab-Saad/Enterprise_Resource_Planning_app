@@ -1,0 +1,46 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sale Invoices</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_sale_invoice' %}">Add Sale Invoice</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Completion Status</th>
+            <th>Invoice Number</th>
+            <th>LDN Number</th>
+            <th>Customer</th>
+            <th>Delivery City</th>
+            <th>Total Amount</th>
+        </tr>
+        {% for each_invoice in sale_invoices %}
+        <tr>
+            {% if each_invoice.ldnnumber == None %}
+                <td><a href="">🔴</a></td>
+            {% else %}
+                <td><a href="">🟢</a></td>
+            {% endif %}
+            <td>{{each_invoice.invoicenumber}}</td>
+            {% if each_invoice.ldnnumber == None%}
+                <td>NA</td>
+            {% else %}
+                <td>{{each_invoice.ldnnumber}}</td> 
+            {% endif %}
+            <td>{{each_invoice.customer.customername}}</td>
+            <td>{{each_invoice.deliverycity.cityname}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endblock %}
+</body>
+</html>

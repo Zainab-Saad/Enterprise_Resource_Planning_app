@@ -1,21 +1,18 @@
-{% extends 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delete</title>
-</head>
-<body>
-    {% block content %}
-    <h4>Are you sure you want to continue deletion? </h4>
-    <form action="" method="POST">
-        {% csrf_token %}
-        <input type="submit" name="yes" value="Yes">
-        <input type="submit" name="no" value="No">
-    </form>
-    {% endblock %}
+{% extends 'base/form.html' %}
+
+{% block headTitle %}Delete PO{% endblock headTitle %}
+
+{% block formHeader %}
+Delete Unverified Purchase Order (NUM)
+{% endblock formHeader %}
+
+
+{% block content %}
+<h4>Are you sure you want to continue deletion? </h4>
+<form action="" method="POST">
+    {% csrf_token %}
+    <input type="submit" name="yes" value="Yes" class="w3-button w3-black w3-padding-large w3-large w3-margin-top">
+    <input type="submit" name="no" value="No" class="w3-button w3-black w3-padding-large w3-large w3-margin-top">
+</form>
+{% endblock %}
     
-</body>
-</html>

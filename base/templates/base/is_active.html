@@ -1,24 +1,15 @@
-{% extends 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% block content %}
-    <table>
-        <tr>
-            <th>Change Is Active status</th>
-            <form action="" method="POST">
-                {% csrf_token %}
-                <td>{{form.isactive}}</td>
-                <input type="submit" name="submit" value="Save active status">
-            </form>
-        </tr>
-    </table>
-    {% endblock %}
-</body>
-</html>
+{% extends 'main.html' %}
+
+{% block header %}Pass Form Name (context){% endblock header %}
+{% block content %}
+<table>
+    <tr>
+        <th>Change Is Active status</th>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <td>{{form.isactive}}</td>
+            <input type="submit" name="submit" value="Save active status" class="w3-button w3-black w3-padding-large w3-large w3-margin-top">
+        </form>
+    </tr>
+</table>
+{% endblock %}

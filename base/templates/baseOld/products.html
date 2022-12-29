@@ -1,0 +1,43 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_products' %}">Add Product</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Product Code</th>
+            <th>Product Name</th>
+            <th>Units</th>
+            <th>Activity Status</th>
+            <th>Update</th>
+            <th>View Full Details</th>
+        </tr>
+        {% for each_product in products %}
+            <tr>
+                <td>{{each_product.productcode}}</td>
+                <td>{{each_product.productname}}</td>
+                <td>{{each_product.units}}</td>
+                {% if each_product.isactive == True %}
+                    <td>Active</td>
+                {% else %}
+                    <td>InActive</td>
+                {% endif %}
+                <td><a href="{% url 'update_products' each_product.productcode %}">Update</a></td>
+                <td><a href="{% url 'products_info' each_product.productcode %}">Open</a><td>
+            </tr>
+        {% endfor %} 
+    </table>
+    {% endblock %}
+</body>
+</html>

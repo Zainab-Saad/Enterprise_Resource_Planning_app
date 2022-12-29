@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from . import templates
+# from django.http import Json
 from .forms import PurchaseOrderForm, CustomerForm, CityForm, SellerForm, ProductForm, SaleInvoiceForm, PriceForm, PriceRateForm, ProductUpdateForm, ProductPriceForm, PurchaseOrderUpdateForm_Unverified, PoTransactionFormSet, PoTransactionUpdateFormSet, PurchaseOrderUpdateForm_Verified
 from .models import Purchaseorder, Seller, Product, Customer, Purchaseordertransaction, Saleinvoice, Saleinvoicetransaction, Price, Pricerate, Productprice
 from django.forms.models import model_to_dict
@@ -596,3 +597,6 @@ def sp_show_po_transactions_info(ponumber):
         result = cursor.fetchall()
         cursor.close()
     return result
+
+def results_data(request, ):
+    pass

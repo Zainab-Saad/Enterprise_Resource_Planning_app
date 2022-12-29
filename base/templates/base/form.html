@@ -1,85 +1,94 @@
-{% extends 'navbar.html' %}
 <!DOCTYPE html>
+
+{% load static %}
 <html lang="en">
+
 <head>
+    <title>O&G | {% block headTitle %}Form{% endblock headTitle %}</title>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Order Form</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
+    <link rel="stylesheet" href='{% static "styles/styles.css" %}'>
 </head>
+
+
 <body>
-    {% block content %}
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form_set.management_form }}
-        {{form.as_p}}
-        {{product_update_form.as_p}}
-        {{product_price_update_form.as_p}}
-        {% for form in form_set %}
-            {{form.as_p}} 
-        {% endfor %}
-        {% if trans_update_form != None %}
-            {{trans_update_form.as_p}}
-        {% endif %}
-        {% if po_submit_button != None %}
-            <input type="submit" name="submit_incomplete_po" value="Submit Incomplete Purchase Order">
-            <input type="submit" name="add_transaction" value="Add Transaction">
-        {% elif trans_submit_button != None %}
-            <input type="submit" name="po_complete" value="Complete Purchase Order">
-            <input type="submit" name="add_transaction" value="Add Another Transaction">
-        {% elif trans_update_button != None %}
-            <input type="submit" name="save_changes" value="Save Changes">
-            <input type="submit" name="add_transaction" value="Add Transaction">
-        {% else %}
-            <input type="submit" name="submit_form_set" value="Submit">
-        {% endif %}
-    </form>
-    {% endblock %}
-</body>
-</html>
 
 
+    <!-- Header -->
+    <header class="w3-container w3-light-grey w3-center" style="padding:30px 16px">
+        <h1 class="w3-margin w3-jumbo">
+            {% block formHeader %}
+            Pass Form Name in Context
+            {% endblock formHeader %}
+        </h1>
+    </header>
 
+    <!-- First Grid -->
+    <div class="w3-row-padding w3-padding-64 w3-container">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 
-    <form action="" method="POST">
-        {% csrf_token %}
-        {{ form_set.management_form }}
-        {% if form_set == None %}
-            {{form.as_p}}
-            {{transaction_form.as_p}}
-            <input type="submit" name="submit_form" value="Submit">
-        {% else %}
-            {% for each_form in form_set %}
-                <p>Add Transaction # {{forloop.counter}}</p>
-                {{each_form.as_p}}
+        <div class="w3-content w3-center w3-red">
+            {% if messages %}
+            {% for message in messages %}
+            <p>{{message}}</p>
             {% endfor %}
-            <input type="hidden" name="po_invoice_number" value={{po_invoice_obj}}>
-            <input type="submit" name="submit_form_set" value="Submit">
-        {% endif %}
-    </form> -->
+            {% endif %}
+        </div>
+        <div class="w3-content ">
+            {% block content %}
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form_set.management_form }}
+                {{ form.as_p}}
+                {{product_update_form.as_p}}
+                {{product_price_update_form.as_p}}
+
+                {% for form in form_set %}
+                {{form.as_p}}
+                {% endfor %}
+
+                {% if trans_update_form != None %}
+                {{trans_update_form.as_p}}
+                {% endif %}
+
+                <div class="submit-btns">
+                    {% if po_submit_button != None %}
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="submit_incomplete_po" value="Submit Incomplete Purchase Order">
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="add_transaction" value="Add Transaction">
+                    {% elif trans_submit_button != None %}
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="po_complete" value="Complete Purchase Order">
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="add_transaction" value="Add Another Transaction">
+                    {% elif trans_update_button != None %}
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="save_changes" value="Save Changes">
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="add_transaction" value="Add Transaction">
+                    {% else %}
+                    <input type="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top"
+                        name="submit_form_set" value="Submit">
+                    {% endif %}
+                </div>
+
+            </form>
+            {% endblock content %}
+        </div>
+        <!-- <div class = "submit-btns">
+        <button id="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top" onclick="insertForm()">Button 1</button>
+        <button id="submit" class="w3-button w3-black w3-padding-large w3-large w3-margin-top" onclick="insertForm()">Button 2</button>
+    </div> -->
+    </div>
+
+
+
+    <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
+        <h1 class="w3-margin w3-xlarge">F O O T E R</h1>
+    </div>
+
+</body>
+
+</html>

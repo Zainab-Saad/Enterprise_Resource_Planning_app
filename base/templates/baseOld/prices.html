@@ -1,0 +1,37 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_prices' %}">Add Price Details</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Price Code</th>
+            <th>Price Title</th>
+            <th>Date Updated</th>
+            <th>Sale Tax Rate</th>
+            <th>Max Dicsount Rate</th>
+            <th>Update Price Code Information</th>
+        </tr>
+        {% for each_price in prices %}
+            <tr>
+                {% for each_price_info in each_price %}
+                    <td>{{each_price_info}}</td>
+                {% endfor %}
+                <td><a href="{% url 'update_prices' each_price.0 %}">Update</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endblock %}
+</body>
+</html>

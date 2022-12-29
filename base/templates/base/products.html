@@ -1,43 +1,53 @@
-{% extends 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-</head>
-<body>
-    {% block content %}
-    <br>
-    <br>
-    <a href="{% url 'add_products' %}">Add Product</a>
-    <br>
-    <br>
-    <table>
-        <tr>
-            <th>Product Code</th>
-            <th>Product Name</th>
-            <th>Units</th>
-            <th>Activity Status</th>
-            <th>Update</th>
-            <th>View Full Details</th>
-        </tr>
-        {% for each_product in products %}
-            <tr>
-                <td>{{each_product.productcode}}</td>
-                <td>{{each_product.productname}}</td>
-                <td>{{each_product.units}}</td>
-                {% if each_product.isactive == True %}
-                    <td>Active</td>
-                {% else %}
-                    <td>InActive</td>
-                {% endif %}
-                <td><a href="{% url 'update_products' each_product.productcode %}">Update</a></td>
-                <td><a href="{% url 'products_info' each_product.productcode %}">Open</a><td>
-            </tr>
-        {% endfor %} 
-    </table>
-    {% endblock %}
-</body>
-</html>
+{% extends 'main.html' %}
+
+{% block headTitle %}Products{% endblock headTitle %}
+
+{% block header %}Products{% endblock header %}
+
+{%block headerActionBtn %}
+<button id="insert-btn" class=" headerActionBtn w3-button w3-black w3-padding-large w3-large w3-margin-top"
+            onclick="insertForm()">Add Product</button>
+{%endblock headerActionBtn %}
+
+
+{% block content %}
+    <!-- Tab content -->
+    <div class="table-1">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Product Name</th>
+                    <th>Units</th>
+                    <th>Status</th>
+                    <th>Update</th>
+                    <th>Open</th>
+                </tr>
+                {% for each_product in products %}
+                    <tr>
+                        <td>{{each_product.productcode}}</td>
+                        <td>{{each_product.productname}}</td>
+                        <td>{{each_product.units}}</td>
+                        {% if each_product.isactive == True %}
+                            <td>Active</td>
+                        {% else %}
+                            <td>InActive</td>
+                        {% endif %}
+                        <td><a href="{% url 'update_products' each_product.productcode %}">Update</a></td>
+                        <td><a href="{% url 'products_info' each_product.productcode %}">Open</a></td>
+                    </tr>
+                {% endfor %}
+
+                 
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
+{% block jscript %}
+<script>
+    function insertForm(evt) {
+        window.open("{% url 'add_products' %}", "_blank")
+    }
+</script>
+{% endblock jscript %}

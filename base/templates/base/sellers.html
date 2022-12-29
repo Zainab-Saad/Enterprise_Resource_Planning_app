@@ -1,45 +1,52 @@
-{% extends 'navbar.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sellers</title>
-</head>
-<body>
-    {% block content %}
-    <br>
-    <br>
-    <a href="{% url 'add_sellers' %}">Add Seller</a>
-    <br>
-    <br>
-    <table>
-        <tr>
-            <th>Seller Code</th>
-            <th>Seller Name</th>
-            <th>Seller GST</th>
-            <th>Seller NTN</th>
-            <th>Activity Status</th>
-            <th>Edit</th>
-        </tr>
-        <tbody>
-            {% for each_seller in sellers %}
+{% extends 'main.html' %}
+
+{% block headTitle %}Sellers{% endblock headTitle %}
+
+{% block header %}Sellers{% endblock header %}
+
+{%block headerActionBtn %}
+<button id="insert-btn" class="headerActionBtn w3-button w3-black w3-padding-large w3-large w3-margin-top"
+            onclick="insertForm()">Add Seller</button>
+{%endblock headerActionBtn %}
+
+
+{% block content %}
+    <!-- Tab content -->
+    <div class="table-1">
+        <table>
+            <tbody>
                 <tr>
-                    <td>{{each_seller.sellercode}}</td>
-                    <td>{{each_seller.sellername}}</td>
-                    <td>{{each_seller.gst}}</td>
-                    <td>{{each_seller.ntn}}</td>
-                    {% if each_seller.isactive == True %}
-                        <td>Active</td>
-                    {% else %}
-                        <td>InActive</td>
-                    {% endif %}
-                    <td><a href="{% url 'sellers_info' each_seller.sellercode %}">Edit</a></td>
+                    <th>Seller Code</th>
+                    <th>Seller Name</th>
+                    <th>Seller GST</th>
+                    <th>Seller NTN</th>
+                    <th>Activity Status</th>
+                    <th>Edit</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endblock %}
-</body>
-</html>
+
+                {% for each_seller in sellers %}
+                    <tr>
+                        <td>{{each_seller.sellercode}}</td>
+                        <td>{{each_seller.sellername}}</td>
+                        <td>{{each_seller.gst}}</td>
+                        <td>{{each_seller.ntn}}</td>
+                        {% if each_seller.isactive == True %}
+                            <td>Active</td>
+                        {% else %}
+                            <td>InActive</td>
+                        {% endif %}
+                        <td><a href="{% url 'sellers_info' each_seller.sellercode %}">Edit</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
+{% block jscript %}
+<script>
+    function insertForm(evt) {
+        window.open("{% url 'add_sellers' %}", "_blank")
+    }
+</script>
+{% endblock jscript %}

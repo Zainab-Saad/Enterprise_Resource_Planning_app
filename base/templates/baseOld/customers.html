@@ -1,0 +1,45 @@
+{% extends 'navbar.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers</title>
+</head>
+<body>
+    {% block content %}
+    <br>
+    <br>
+    <a href="{% url 'add_customers' %}">Add Customer</a>
+    <br>
+    <br>
+    <table>
+        <tr>
+            <th>Customer Code</th>
+            <th>Customer Name</th>
+            <th>Address</th>
+            <th>GST</th>
+            <th>NTN</th>
+            <th>Is Active</th>
+        </tr>
+        
+        {% for each_customer in customers %}
+        <tr>
+            <td>{{each_customer.customercode}}</td>
+            <td>{{each_customer.customername}}</td>
+            <td>{{each_customer.address}}</td>
+            <td>{{each_customer.gst}}</td>
+            <td>{{each_customer.ntn}}</td>
+            {% if each_customer.isactive == True %}
+                    <td><a href="{% url 'customers_info' each_customer.customercode %}">🟢</a></td>
+                    {% else %}
+                    <td><a href="{% url 'customers_info' each_customer.customercode %}">🔴</a></td>
+                    {% endif %}
+        </tr>
+        {% endfor %} 
+        
+    </table>
+    {% endblock %}
+</body>
+</html>
