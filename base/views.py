@@ -9,15 +9,31 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import authenticate, login, logout
 from django.forms import modelformset_factory, inlineformset_factory
 from copy import copy
+from django.http import JsonResponse
 from django.contrib import messages
 
 # Create your views here.
 @login_required(login_url='login')
 def home(request):
+    unverified_po = sp_count_po()[0] - sp_count_verified_po()[0]
+    po_final_payment_invoice_remaining = sp_count_po_final_payment_invoice_remaining()[0]
+    po_delivery_remaining = sp_count_verified_po()[0] - sp_count_completed_po()[0]
     context = {
-        
+        'unverified_po' : unverified_po,
+        'po_final_payment_invoice_remaining' : po_final_payment_invoice_remaining,
+        'po_delivery_remaining' : po_delivery_remaining
     }
     return render(request, 'base/dashboard.html', context)
+
+def fetch_dashboard_data(request):
+    results = sp_verified_purchase_order_payment_analysis()
+    advPayment = results[0].get('advance_payed')
+    PendPayment = results[0].get('total_payable_amount') - advPayment
+    po_payments = [advPayment,PendPayment]
+    # for key, value in results[0]:
+    #     po_payments.append({key:value})
+    # print(po_payments)
+    return JsonResponse(po_payments, safe=False)
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -600,3 +616,38 @@ def sp_show_po_transactions_info(ponumber):
 
 def results_data(request, ):
     pass
+
+def sp_count_po():
+    with connection.cursor() as cursor:
+        cursor.callproc('count_purchase_orders')
+        result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def sp_count_verified_po():
+    with connection.cursor() as cursor:
+        cursor.callproc('count_verified_purchase_orders')
+        result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def sp_count_po_final_payment_invoice_remaining():
+    with connection.cursor() as cursor:
+        cursor.callproc('count_po_final_payment_invoice_remaining')
+        result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def sp_count_completed_po():
+    with connection.cursor() as cursor:
+        cursor.callproc('count_completed_po')
+        result = cursor.fetchone()
+        cursor.close()
+    return result
+
+def sp_verified_purchase_order_payment_analysis():
+    with connection.cursor() as cursor:
+        cursor.callproc('verified_purchase_order_payment_analysis')
+        result = dictfetchall(cursor)
+        cursor.close()
+    return result

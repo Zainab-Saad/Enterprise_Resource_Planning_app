@@ -23,6 +23,7 @@ urlpatterns = [
     path('customers/<str:instance_customercode>', views.customers_info, name="customers_info"),
     path('add-customers/', views.customers_add, name="add_customers"),
     path('dashboard/', views.home, name="dashboard"),
+    path('fetch-dashboard-data/', views.fetch_dashboard_data, name="fetch_dashboard_data"),
     path('add-transaction/<str:pk>', views.purchase_transactions_add, name="purchase_add_transactions"),
     path('sale-invoices/', views.sale_invoices, name="sale_invoices"),
     path('add-sale-invoice/', views.sale_invoice_add, name="add_sale_invoice"),
