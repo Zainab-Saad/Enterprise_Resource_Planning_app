@@ -1,7 +1,7 @@
 # django-Enterprise_Resource_Planning_app
 Enterprise resource planning web application for oil and gas company
 
-######Cloning the repository
+####Cloning the repository####
 ** Clone the repository using the command below :
 ```
 git clone https://github.com/Zainab-Saad/Enterprise_Resource_Planning_app
@@ -26,7 +26,7 @@ env\scripts\activate
 ```
 pip install -r requirements.txt
 ```
-######Running the App
+####Running the App####
 * To run the App, we use :
 ```
 python manage.py runserver
